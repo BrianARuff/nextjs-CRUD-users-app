@@ -2,8 +2,7 @@ import * as React from "react";
 import { useEffect, useState, useRef } from "react";
 
 const Home = () => {
-  const nameRef = useRef();
-  const ageRef = useRef();
+  const nameRef = useRef(null);
 
   const [users, setusers] = useState([]);
   const [error, setError] = useState({});
@@ -21,7 +20,7 @@ const Home = () => {
       .catch((err) => setError(err));
   }, [users]);
 
-  const handleAddUser = (e) => {
+  const handleAddUser = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const user = {
       name: formData.name,
@@ -33,22 +32,11 @@ const Home = () => {
       headers: {
         "Content-Type": "application/json",
       },
-    }).catch((err) => console.log(err));
-    nameRef.current.value = "";
-    ageRef.current.value = "";
+    }).catch((err) => setError(err));
     nameRef.current.focus();
   };
 
-  const handleInputChange = (e: any) => {
-    setFormData((prevState) => {
-      return {
-        ...prevState,
-        [e.target.name]: e.target.value,
-      };
-    });
-  };
-
-  const handleUpdateUser = (e) => {
+  const handleUpdateUser = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const { name, age, newName, newAge } = formData;
     const updatedUser = {
@@ -83,6 +71,15 @@ const Home = () => {
     });
   };
 
+  const handleInputChange = (e: any) => {
+    setFormData((prevState) => {
+      return {
+        ...prevState,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
   return (
     <>
       <form>
@@ -103,7 +100,6 @@ const Home = () => {
             type="number"
             id="age"
             name="age"
-            ref={ageRef}
           />
         </div>
         <div>
